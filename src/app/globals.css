@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  /* Цвета */
+  --color-parchment-light: #f5e6c8;
+  --color-parchment: #edd497;
+  --color-parchment-dark: #c9ad7a;
+  --color-dark-bg: #1a1512;
+  --color-dark-surface: #2a211c;
+  --color-gold: #ffbe0b;
+  --color-white: #ffffff;
+  --color-deep-red: #7a2e2e;
+
+  /* Шрифты */
+  --font-medieval: "Tahoma", sans-serif;
+  --font-fantasy: "Tahoma", sans-serif;
+  --font-small: "Tahoma", sans-serif;
+  --font-numbers: "Verdana", sans-serif;
+}
+
+.font-medieval {
+  font-weight: 900;
+}
+
+:root {
+  --background: #1a1512;
+  --foreground: #e8d5a3;
+}
+
+.light {
+  --background: #f5e6c8;
+  --foreground: #1a1512;
+}
+
+body {
+  background-color: #1a1512;
+  background-image: url("/images/background.webp");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  color: var(--foreground);
+  font-family: var(--font-fantasy);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Стилизация скроллбара */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #2a211c;
+}
+::-webkit-scrollbar-thumb {
+  background: #ffbe0b;
+  border-radius: 5px;
+}
