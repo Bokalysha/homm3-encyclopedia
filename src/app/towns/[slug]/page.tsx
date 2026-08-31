@@ -5,11 +5,43 @@ import Image from "next/image";
 import TownGallery from "@/components/TownGallery";
 
 interface TownPageProps {
-  params: Promise<{ slug: string }>;  // теперь Promise
+  params: Promise<{ slug: string }>;
+}
+
+function ResourceText({ text }: { text: string }) {
+  const parts = text.split(/(\d+)|(золотых|золота)/gi).filter(Boolean);
+
+  return (
+    <>
+      {parts.map((part, index) => {
+        const lower = part.toLowerCase();
+        if (lower === "золотых" || lower === "золота") {
+          return (
+            <Image
+              key={index}
+              src="/images/gold-mini.webp"
+              width={20}
+              height={16}
+              alt="золото"
+              className="inline-block mx-0.5"
+            />
+          );
+        }
+        if (/^\d+$/.test(part)) {
+          return (
+            <span key={index} className="italic">
+              {part}
+            </span>
+          );
+        }
+        return <span key={index}>{part}</span>;
+      })}
+    </>
+  );
 }
 
 export default async function TownPage({ params }: TownPageProps) {
-  const { slug } = await params;     // дожидаемся параметров
+  const { slug } = await params;
 
   const town = await prisma.town.findUnique({
     where: { slug },
@@ -21,38 +53,6 @@ export default async function TownPage({ params }: TownPageProps) {
   const categories = Array.from(
     new Set(town.buildings.map((b) => b.category))
   );
-
-  function DescriptionWithResources({ text }: { text: string }) {
-    const parts = text.split(/(\d+)|(золотых|золота)/gi).filter(Boolean);
-
-    return (
-      <>
-        {parts.map((part, index) => {
-          const lower = part.toLowerCase();
-          if (lower === "золотых" || lower === "золота") {
-            return (
-              <Image
-                key={index}
-                src="/images/gold-mini.webp"
-                width={20}
-                height={16}
-                alt="золото"
-                className="inline-block mx-0.5"
-              />
-            );
-          }
-          if (/^\d+$/.test(part)) {
-            return (
-              <span key={index} className="italic">
-                {part}
-              </span>
-            );
-          }
-          return <span key={index}>{part}</span>;
-        })}
-      </>
-    );
-  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -81,7 +81,7 @@ export default async function TownPage({ params }: TownPageProps) {
         <div className="flex-1 space-y-4">
           {town.description &&
             town.description
-              .replace(/\\n/g, "\n") // превращаем литеральные \n в настоящие переносы
+              .replace(/\\n/g, "\n")
               .split(/\n\s*\n/)
               .map((paragraph, index) => (
                 <p key={index} className="text-parchment-light leading-relaxed">
@@ -106,11 +106,16 @@ export default async function TownPage({ params }: TownPageProps) {
         Постройки
       </h2>
       {categories.map((category) => (
-        <div key={category} className="mb-8">
-          <h3 className="text-xl font-medieval text-parchment-light mb-3">
-            {category}
-          </h3>
-          <div className="overflow-x-auto">
+        <details key={category} className="mb-4 group">
+          <summary className="cursor-pointer flex items-center justify-between bg-dark-surface/80 border border-gold/60 rounded-t-lg px-4 py-3 text-left hover:bg-dark-surface transition-colors list-none">
+            <span className="text-xl font-medieval text-parchment-light">
+              {category}
+            </span>
+            <span className="text-gold text-2xl leading-none group-open:hidden">+</span>
+            <span className="text-gold text-2xl leading-none hidden group-open:inline">−</span>
+          </summary>
+
+          <div className="border border-t-0 border-gold/60 rounded-b-lg overflow-x-auto bg-dark-bg/20">
             <table className="w-full text-left border-collapse table-bg">
               <thead>
                 <tr className="text-parchment-light text-center">
@@ -147,7 +152,7 @@ export default async function TownPage({ params }: TownPageProps) {
                         {building.name}
                       </td>
                       <td className="p-2 border border-gold/60 text-parchment-dark">
-                        {building.description ? <DescriptionWithResources text={building.description} /> : "—"}
+                        {building.description ? <ResourceText text={building.description} /> : "—"}
                       </td>
                       <td className="p-2 border border-gold/60 text-parchment-light">
                         {building.goldCost > 0 ? (
@@ -175,31 +180,31 @@ export default async function TownPage({ params }: TownPageProps) {
                           {building.oreCost > 0 && (
                             <span className="flex items-center gap-1">
                               <span className="italic">{building.oreCost}</span>
-                              <Image src="/images/ore-mini.webp" width={20} height={16} alt="Руда" className="mr-1" />
+                              <Image src="/images/ore-mini.webp" width={20} height={16} alt="Руда" />
                             </span>
                           )}
                           {building.mercuryCost > 0 && (
                             <span className="flex items-center gap-1">
                               <span className="italic">{building.mercuryCost}</span>
-                              <Image src="/images/mercury-mini.webp" width={20} height={16} alt="Ртуть" className="mr-1" />
+                              <Image src="/images/mercury-mini.webp" width={20} height={16} alt="Ртуть" />
                             </span>
                           )}
                           {building.sulfurCost > 0 && (
                             <span className="flex items-center gap-1">
                               <span className="italic">{building.sulfurCost}</span>
-                              <Image src="/images/sulfur-mini.webp" width={20} height={16} alt="Сера" className="mr-1" />
+                              <Image src="/images/sulfur-mini.webp" width={20} height={16} alt="Сера" />
                             </span>
                           )}
                           {building.crystalCost > 0 && (
                             <span className="flex items-center gap-1">
                               <span className="italic">{building.crystalCost}</span>
-                              <Image src="/images/crystal-mini.webp" width={20} height={16} alt="Кристаллы" className="mr-1" />
+                              <Image src="/images/crystal-mini.webp" width={20} height={16} alt="Кристаллы" />
                             </span>
                           )}
                           {building.gemCost > 0 && (
                             <span className="flex items-center gap-1">
                               <span className="italic">{building.gemCost}</span>
-                              <Image src="/images/gem-mini.webp" width={20} height={16} alt="Самоцветы" className="mr-1" />
+                              <Image src="/images/gem-mini.webp" width={20} height={16} alt="Самоцветы" />
                             </span>
                           )}
                           {building.woodCost === 0 &&
@@ -210,7 +215,7 @@ export default async function TownPage({ params }: TownPageProps) {
                             building.gemCost === 0 && (
                             <span className="text-parchment-dark">—</span>
                           )}
-                        </div>  
+                        </div>
                       </td>
                       <td className="p-2 border border-gold/60 text-parchment-dark">
                         {building.requirements || "—"}
@@ -220,7 +225,7 @@ export default async function TownPage({ params }: TownPageProps) {
               </tbody>
             </table>
           </div>
-        </div>
+        </details>
       ))}
     </div>
   );
