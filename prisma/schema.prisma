@@ -8,16 +8,22 @@ datasource db {
 }
 
 model Town {
-  id            Int        @id @default(autoincrement())
-  name          String
-  slug          String     @unique
-  description   String?
-  alignment     String
-  nativeTerrain String?
-  image         String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  buildings     Building[] // связь один-ко-многим
+  id                  Int      @id @default(autoincrement())
+  name                String
+  slug                String   @unique
+  description         String?
+  alignment           String
+  nativeTerrain       String?
+  country             String?
+  continent           String?
+  imageWithFort       String?
+  imageWithoutFort    String?
+  imageMain           String?
+  imageMainNoBuildings String?
+  soundtrack          String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  buildings           Building[]
 }
 
 model Building {

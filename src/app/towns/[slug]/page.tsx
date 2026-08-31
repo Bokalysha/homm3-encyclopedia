@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
+import TownGallery from "@/components/TownGallery";
 
 interface TownPageProps {
   params: Promise<{ slug: string }>;  // теперь Promise
@@ -62,15 +63,44 @@ export default async function TownPage({ params }: TownPageProps) {
         ← Все города
       </Link>
       <h1 className="text-4xl font-medieval text-gold mt-4">{town.name}</h1>
-      <div className="mt-2 text-parchment-light">
-        <span className="mr-4">Мировоззрение: {town.alignment}</span>
-        {town.nativeTerrain && (
-          <span>Родная местность: {town.nativeTerrain}</span>
-        )}
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 table-bg p-2 border border-gold/60 rounded">
+        <div className="p-3 border border-gold/60">
+          <span className="text-parchment-light">Мировоззрение: {town.alignment}</span>
+        </div>
+        <div className="p-3 border border-gold/60">
+          <span className="text-parchment-light">Родная местность: {town.nativeTerrain}</span>
+        </div>
+        <div className="p-3 border border-gold/60">
+          <span className="text-parchment-light">Государство: {town.country}</span>
+        </div>
+        <div className="p-3 border border-gold/60">
+          <span className="text-parchment-light">Континент: {town.continent}</span>
+        </div>
       </div>
-      {town.description && (
-        <p className="mt-4 text-parchment-light">{town.description}</p>
-      )}
+      <div className="mt-4 flex flex-col lg:flex-row gap-8">
+        <div className="flex-1 space-y-4">
+          {town.description &&
+            town.description
+              .replace(/\\n/g, "\n") // превращаем литеральные \n в настоящие переносы
+              .split(/\n\s*\n/)
+              .map((paragraph, index) => (
+                <p key={index} className="text-parchment-light leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
+        </div>
+        <div className="flex-1 lg:max-w-md">
+          <TownGallery
+            images={[
+              town.imageWithFort ? { src: town.imageWithFort, alt: "С фортом" } : null,
+              town.imageWithoutFort ? { src: town.imageWithoutFort, alt: "Без форта" } : null,
+              town.imageMain ? { src: town.imageMain, alt: "Главный экран" } : null,
+              town.imageMainNoBuildings ? { src: town.imageMainNoBuildings, alt: "Главный экран без построек" } : null,
+            ].filter(Boolean) as { src: string; alt: string }[]}
+            soundtrack={town.soundtrack || undefined}
+          />
+        </div>
+      </div>
 
       <h2 className="text-2xl font-medieval text-gold mt-10 mb-4">
         Постройки
