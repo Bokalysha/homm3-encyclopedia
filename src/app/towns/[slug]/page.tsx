@@ -62,7 +62,18 @@ export default async function TownPage({ params }: TownPageProps) {
       >
         ← Все города
       </Link>
-      <h1 className="text-4xl font-medieval text-gold mt-4">{town.name}</h1>
+      <div className="flex items-center gap-3 mt-4">
+        {town.icon && (
+          <Image
+            src={town.icon}
+            width={48}
+            height={32}
+            alt={`Иконка города ${town.name}`}
+            className="border border-gold/60 rounded"
+          />
+        )}
+        <h1 className="text-4xl font-medieval text-gold">{town.name}</h1>
+      </div>
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 table-bg p-2 border border-gold/60 rounded">
         <div className="p-3 border border-gold/60">
           <span className="text-parchment-light">Мировоззрение: {town.alignment}</span>

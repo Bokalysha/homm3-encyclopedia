@@ -16,6 +16,7 @@ model Town {
   nativeTerrain       String?
   country             String?
   continent           String?
+  icon                String?
   imageWithFort       String?
   imageWithoutFort    String?
   imageMain           String?
