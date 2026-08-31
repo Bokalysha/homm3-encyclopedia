@@ -42,6 +42,12 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.table-bg {
+  background-image: url('/images/table-bg.webp');
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
 /* Стилизация скроллбара */
 ::-webkit-scrollbar {
   width: 5px;

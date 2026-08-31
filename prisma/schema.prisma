@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Town {
+  id            Int        @id @default(autoincrement())
+  name          String
+  slug          String     @unique
+  description   String?
+  alignment     String
+  nativeTerrain String?
+  image         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  buildings     Building[] // связь один-ко-многим
+}
+
+model Building {
+  id          Int      @id @default(autoincrement())
+  townId      Int      // внешний ключ
+  town        Town     @relation(fields: [townId], references: [id])
+  name        String
+  description String?
+  category    String   // тип: "Инфраструктура", "Магические постройки", "Жилища существ" и т.д.
+  goldCost    Int      @default(0)
+  woodCost    Int      @default(0)
+  oreCost     Int      @default(0)
+  mercuryCost Int      @default(0)
+  sulfurCost  Int      @default(0)
+  crystalCost Int      @default(0)
+  gemCost     Int      @default(0)
+  requirements String? // текстовое описание требований (пока)
+  image       String?  // путь к изображению
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
