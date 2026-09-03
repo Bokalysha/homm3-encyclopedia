@@ -1,0 +1,27 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: homm3-app
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=file:./dev.db
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  studio:
+    build:
+      context: .
+      dockerfile: Dockerfile.studio
+    container_name: homm3-studio
+    ports:
+      - "5555:5555"
+    environment:
+      - DATABASE_URL=file:./dev.db
+    volumes:
+      - ./prisma:/app/prisma
+    restart: unless-stopped

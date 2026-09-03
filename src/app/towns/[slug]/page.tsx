@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import TownGallery from "@/components/TownGallery";
 
+export const dynamic = "force-dynamic";
+
 interface TownPageProps {
   params: Promise<{ slug: string }>;
 }
