@@ -4,14 +4,65 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export default async function TownsPage() {
+interface TownsPageProps {
+  searchParams: Promise<{ sort?: string }>;
+}
+
+export default async function TownsPage({ searchParams }: TownsPageProps) {
+  const { sort } = await searchParams;
+
+  let orderBy: any;
+  switch (sort) {
+    case "alphabet":
+      orderBy = { name: "asc" };
+      break;
+    case "alignment":
+      orderBy = { alignment: "asc" };
+      break;
+    case "terrain":
+      orderBy = { nativeTerrain: "asc" };
+      break;
+    case "continent":
+      orderBy = { continent: "asc" };
+      break;
+    default:
+      orderBy = { id: "asc" };
+  }
+
   const towns = await prisma.town.findMany({
-    orderBy: { name: "asc" },
+    orderBy,
   });
+
+  const filterItems = [
+    { key: "id", label: "По игре", href: "/towns?sort=id" },
+    { key: "alphabet", label: "По алфавиту", href: "/towns?sort=alphabet" },
+    { key: "alignment", label: "По мировоззрению", href: "/towns?sort=alignment" },
+    { key: "terrain", label: "По родной земле", href: "/towns?sort=terrain" },
+    { key: "continent", label: "По континенту", href: "/towns?sort=continent" },
+  ];
+
+  const activeSort = sort || "id";
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl font-medieval text-gold mb-8">Фракции</h1>
+
+      {/* Фильтры */}
+      <div className="flex flex-wrap gap-2 mb-8">
+        {filterItems.map((item) => (
+          <Link
+            key={item.key}
+            href={item.href}
+            className={`px-4 py-2 rounded border transition-colors ${
+              activeSort === item.key
+                ? "bg-gold/20 border-gold text-gold"
+                : "bg-dark-surface border-gold/30 text-parchment-light hover:border-gold/70"
+            }`}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </div>
 
       <p className="mt-4 text-parchment-light leading-relaxed">
         Каждая фракция в Heroes of Might and Magic III обладает уникальными
@@ -25,7 +76,7 @@ export default async function TownsPage() {
       </p>
 
       <p className="mt-4 text-parchment-light leading-relaxed mb-8">
-        Всего в игре вместе с дополнениями представлено 12 фракций:
+        Всего в игре вместе с дополнениями представлено {towns.length} фракций:
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -59,9 +110,18 @@ export default async function TownsPage() {
                   {town.description.replace(/\\n/g, " ")}
                 </p>
               )}
-              <div className="mt-2 text-xs text-parchment-dark">
+              {/* <div className="mt-2 text-xs text-parchment-dark">
                 {town.alignment}
               </div>
+              <div className="mt-2 text-xs text-parchment-dark">
+                {town.nativeTerrain}
+              </div>
+              <div className="mt-2 text-xs text-parchment-dark">
+                {town.country}
+              </div>
+              <div className="mt-2 text-xs text-parchment-dark">
+                {town.continent}
+              </div> */}
             </div>
           </Link>
         ))}
