@@ -17,8 +17,11 @@ model Town {
   country             String?
   continent           String?
   icon                String?
-  imageWithFort       String?
+  imageForCard        String?
   imageWithoutFort    String?
+  imageWithFort       String?
+  imageWithCitadel    String?
+  imageWithCastle     String?
   imageMain           String?
   imageMainNoBuildings String?
   soundtrack          String?

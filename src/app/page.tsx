@@ -26,7 +26,7 @@ const sections = [
     href: "/artifacts",
   },
   {
-    title: "Города",
+    title: "Фракции",
     description: "Фракционные города, строения, найм существ",
     icon: "🏰",
     href: "/towns",

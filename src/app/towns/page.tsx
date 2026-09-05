@@ -11,7 +11,23 @@ export default async function TownsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-4xl font-medieval text-gold mb-8">Города</h1>
+      <h1 className="text-4xl font-medieval text-gold mb-8">Фракции</h1>
+
+      <p className="mt-4 text-parchment-light leading-relaxed">
+        Каждая фракция в Heroes of Might and Magic III обладает уникальными
+        строениями, существами и героями, определяющими её тактический стиль.
+        Выберите фракцию, чтобы узнать больше о её городе, архитектуре и боевых
+        возможностях.
+      </p>
+      <p className="mt-4 text-parchment-light leading-relaxed">
+        Фракции также отличаются мировоззрением (добрые, нейтральные, злые) и
+        родной местностью, что влияет на скорость передвижения армий по карте.
+      </p>
+
+      <p className="mt-4 text-parchment-light leading-relaxed mb-8">
+        Всего в игре вместе с дополнениями представлено 12 фракций:
+      </p>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {towns.map((town) => (
           <Link
@@ -19,12 +35,11 @@ export default async function TownsPage() {
             href={`/towns/${town.slug}`}
             className="group bg-dark-surface border border-gold/30 rounded-lg overflow-hidden hover:border-gold/70 hover:shadow-lg hover:shadow-gold/10 transition-all duration-300"
           >
-            {/* Изображение главного экрана с постройками */}
             <div className="relative w-full h-48 overflow-hidden">
-              {town.imageMain ? (
+              {town.imageForCard ? (
                 <Image
-                  src={town.imageMain}
-                  alt={`${town.name} — главный экран`}
+                  src={town.imageForCard}
+                  alt={`${town.name} — фракция`}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-300"

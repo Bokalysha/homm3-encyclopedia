@@ -24,8 +24,8 @@ export default function TownGallery({ images, soundtrack }: TownGalleryProps) {
 
   return (
     <div className="flex flex-col items-center">
-      {/* Окно галереи: фиксированные пропорции 800:374, максимум 800px */}
-      <div className="w-full max-w-[800px] aspect-[800/374] bg-dark-surface/30 border border-gold/30 rounded-lg overflow-hidden flex items-center justify-center">
+      {/* Окно галереи */}
+      <div className="w-full max-w-[800px] aspect-[800/400] rounded-lg overflow-hidden flex items-center justify-center">
         <img
           src={currentImage.src}
           alt={currentImage.alt}
@@ -40,7 +40,7 @@ export default function TownGallery({ images, soundtrack }: TownGalleryProps) {
           className="w-8 h-8 flex items-center justify-center rounded-full bg-dark-surface hover:bg-gold/50 text-parchment-light transition-colors"
           aria-label="Предыдущее изображение"
         >
-          ←
+          🢀
         </button>
 
         <div className="flex gap-2">
@@ -61,7 +61,7 @@ export default function TownGallery({ images, soundtrack }: TownGalleryProps) {
           className="w-8 h-8 flex items-center justify-center rounded-full bg-dark-surface hover:bg-gold/50 text-parchment-light transition-colors"
           aria-label="Следующее изображение"
         >
-          →
+          🢂
         </button>
       </div>
 

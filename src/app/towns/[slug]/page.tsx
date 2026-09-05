@@ -62,7 +62,7 @@ export default async function TownPage({ params }: TownPageProps) {
         href="/towns"
         className="text-parchment-dark hover:text-gold transition-colors"
       >
-        ← Все города
+        ← Все фракции
       </Link>
       <div className="flex items-center gap-3 mt-4">
         {town.icon && (
@@ -105,10 +105,12 @@ export default async function TownPage({ params }: TownPageProps) {
         <div className="flex-1 lg:max-w-md">
           <TownGallery
             images={[
-              town.imageWithFort ? { src: town.imageWithFort, alt: "С фортом" } : null,
-              town.imageWithoutFort ? { src: town.imageWithoutFort, alt: "Без форта" } : null,
-              town.imageMain ? { src: town.imageMain, alt: "Главный экран" } : null,
-              town.imageMainNoBuildings ? { src: town.imageMainNoBuildings, alt: "Главный экран без построек" } : null,
+              town.imageWithoutFort ? { src: town.imageWithoutFort, alt: "Сельская управа" } : null,
+              town.imageWithFort ? { src: town.imageWithFort, alt: "Форт" } : null,
+              town.imageWithCitadel ? { src: town.imageWithCitadel, alt: "Цитадель" } : null,
+              town.imageWithCastle ? { src: town.imageWithCastle, alt: "Замок" } : null,
+              town.imageMain ? { src: town.imageMain, alt: "Внутренний вид города" } : null,
+              town.imageMainNoBuildings ? { src: town.imageMainNoBuildings, alt: "Внутренний вид города без построек" } : null,
             ].filter(Boolean) as { src: string; alt: string }[]}
             soundtrack={town.soundtrack || undefined}
           />
@@ -152,8 +154,8 @@ export default async function TownPage({ params }: TownPageProps) {
                         {building.image ? (
                           <Image
                             src={building.image}
-                            width={150}
-                            height={70}
+                            width={250}
+                            height={120}
                             alt={building.name}
                             className="rounded border border-gold/60 transition-transform duration-300 hover:scale-110"
                           />
