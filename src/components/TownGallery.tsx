@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLightbox } from "./Lightbox";
 
 interface TownGalleryProps {
   images: { src: string; alt: string }[];
@@ -9,6 +10,7 @@ interface TownGalleryProps {
 
 export default function TownGallery({ images, soundtrack }: TownGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { openLightbox } = useLightbox();
 
   if (images.length === 0) return null;
 
@@ -24,8 +26,10 @@ export default function TownGallery({ images, soundtrack }: TownGalleryProps) {
 
   return (
     <div className="flex flex-col items-center">
-      {/* Окно галереи */}
-      <div className="w-full max-w-[800px] aspect-[800/400] rounded-lg overflow-hidden flex items-center justify-center">
+      <div
+        className="w-full max-w-[800px] aspect-[800/400] rounded-lg overflow-hidden flex items-center justify-center cursor-zoom-in"
+        onClick={() => openLightbox(currentImage.src, currentImage.alt)}
+      >
         <img
           src={currentImage.src}
           alt={currentImage.alt}
