@@ -21,7 +21,7 @@ function ResourceText({ text }: { text: string }) {
           return (
             <Image
               key={index}
-              src="/images/gold-mini.webp"
+              src="/images/resources/gold-mini.webp"
               width={20}
               height={16}
               alt="золото"
@@ -75,6 +75,15 @@ export default async function TownPage({ params }: TownPageProps) {
           />
         )}
         <h1 className="text-4xl font-medieval text-gold">{town.name}</h1>
+          {town.iconVersion && (
+            <Image
+              src={town.iconVersion}
+              width={32}
+              height={32}
+              alt={`Версия ${town.name}`}
+              className="rounded"
+            />
+          )}
       </div>
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 table-bg p-2 border border-gold/60 rounded">
         <div className="p-3 border border-gold/60">
@@ -174,7 +183,7 @@ export default async function TownPage({ params }: TownPageProps) {
                           <div className="flex items-center gap-1">
                             <span className="italic">{building.goldCost}</span>
                             <Image
-                              src="/images/gold-mini.webp"
+                              src="/images/resources/gold-mini.webp"
                               width={20}
                               height={16}
                               alt="Золото"
@@ -189,37 +198,37 @@ export default async function TownPage({ params }: TownPageProps) {
                           {building.woodCost > 0 && (
                             <span className="flex items-center gap-1">
                               <span className="italic">{building.woodCost}</span>
-                              <Image src="/images/wood-mini.webp" width={20} height={16} alt="Дерево" />
+                              <Image src="/images/resources/wood-mini.webp" width={20} height={16} alt="Дерево" />
                             </span>
                           )}
                           {building.oreCost > 0 && (
                             <span className="flex items-center gap-1">
                               <span className="italic">{building.oreCost}</span>
-                              <Image src="/images/ore-mini.webp" width={20} height={16} alt="Руда" />
+                              <Image src="/images/resources/ore-mini.webp" width={20} height={16} alt="Руда" />
                             </span>
                           )}
                           {building.mercuryCost > 0 && (
                             <span className="flex items-center gap-1">
                               <span className="italic">{building.mercuryCost}</span>
-                              <Image src="/images/mercury-mini.webp" width={20} height={16} alt="Ртуть" />
+                              <Image src="/images/resources/mercury-mini.webp" width={20} height={16} alt="Ртуть" />
                             </span>
                           )}
                           {building.sulfurCost > 0 && (
                             <span className="flex items-center gap-1">
                               <span className="italic">{building.sulfurCost}</span>
-                              <Image src="/images/sulfur-mini.webp" width={20} height={16} alt="Сера" />
+                              <Image src="/images/resources/sulfur-mini.webp" width={20} height={16} alt="Сера" />
                             </span>
                           )}
                           {building.crystalCost > 0 && (
                             <span className="flex items-center gap-1">
                               <span className="italic">{building.crystalCost}</span>
-                              <Image src="/images/crystal-mini.webp" width={20} height={16} alt="Кристаллы" />
+                              <Image src="/images/resources/crystal-mini.webp" width={20} height={16} alt="Кристаллы" />
                             </span>
                           )}
                           {building.gemCost > 0 && (
                             <span className="flex items-center gap-1">
                               <span className="italic">{building.gemCost}</span>
-                              <Image src="/images/gem-mini.webp" width={20} height={16} alt="Самоцветы" />
+                              <Image src="/images/resources/gem-mini.webp" width={20} height={16} alt="Самоцветы" />
                             </span>
                           )}
                           {building.woodCost === 0 &&

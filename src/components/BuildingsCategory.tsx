@@ -76,7 +76,7 @@ export default function BuildingsCategory({ category, buildings }: BuildingsCate
                       <div className="flex items-center gap-1">
                         <span className="italic">{building.goldCost}</span>
                         <Image
-                          src="/images/gold-mini.webp"
+                          src="/images/resources/gold-mini.webp"
                           width={20}
                           height={16}
                           alt="Золото"
@@ -91,37 +91,37 @@ export default function BuildingsCategory({ category, buildings }: BuildingsCate
                       {building.woodCost > 0 && (
                         <span className="flex items-center gap-1">
                           <span className="italic">{building.woodCost}</span>
-                          <Image src="/images/wood-mini.webp" width={20} height={16} alt="Дерево" />
+                          <Image src="/images/resources/wood-mini.webp" width={20} height={16} alt="Дерево" />
                         </span>
                       )}
                       {building.oreCost > 0 && (
                         <span className="flex items-center gap-1">
                           <span className="italic">{building.oreCost}</span>
-                          <Image src="/images/ore-mini.webp" width={20} height={16} alt="Руда" />
+                          <Image src="/images/resources/ore-mini.webp" width={20} height={16} alt="Руда" />
                         </span>
                       )}
                       {building.mercuryCost > 0 && (
                         <span className="flex items-center gap-1">
                           <span className="italic">{building.mercuryCost}</span>
-                          <Image src="/images/mercury-mini.webp" width={20} height={16} alt="Ртуть" />
+                          <Image src="/images/resources/mercury-mini.webp" width={20} height={16} alt="Ртуть" />
                         </span>
                       )}
                       {building.sulfurCost > 0 && (
                         <span className="flex items-center gap-1">
                           <span className="italic">{building.sulfurCost}</span>
-                          <Image src="/images/sulfur-mini.webp" width={20} height={16} alt="Сера" />
+                          <Image src="/images/resources/sulfur-mini.webp" width={20} height={16} alt="Сера" />
                         </span>
                       )}
                       {building.crystalCost > 0 && (
                         <span className="flex items-center gap-1">
                           <span className="italic">{building.crystalCost}</span>
-                          <Image src="/images/crystal-mini.webp" width={20} height={16} alt="Кристаллы" />
+                          <Image src="/images/resources/crystal-mini.webp" width={20} height={16} alt="Кристаллы" />
                         </span>
                       )}
                       {building.gemCost > 0 && (
                         <span className="flex items-center gap-1">
                           <span className="italic">{building.gemCost}</span>
-                          <Image src="/images/gem-mini.webp" width={20} height={16} alt="Самоцветы" />
+                          <Image src="/images/resources/gem-mini.webp" width={20} height={16} alt="Самоцветы" />
                         </span>
                       )}
                       {building.woodCost === 0 &&

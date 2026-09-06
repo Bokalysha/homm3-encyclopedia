@@ -17,7 +17,7 @@ export default function ResourceText({ text }: ResourceTextProps) {
           return (
             <Image
               key={index}
-              src="/images/gold-mini.webp"
+              src="/images/resources/gold-mini.webp"
               width={20}
               height={16}
               alt="золото"

@@ -5,11 +5,18 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 interface TownsPageProps {
-  searchParams: Promise<{ sort?: string }>;
+  searchParams: Promise<{ sort?: string; versions?: string }>;
 }
 
+// Маппинг имён файлов на читаемые названия
+const versionLabels: Record<string, string> = {
+  "roe.gif": "Возрождение Эрафии",
+  "ab.gif": "Клинок Армагеддона",
+  "hota.png": "Рог Бездны",
+};
+
 export default async function TownsPage({ searchParams }: TownsPageProps) {
-  const { sort } = await searchParams;
+  const { sort, versions } = await searchParams;
 
   const orderBy = ({
     alphabet: { name: "asc" as const },
@@ -19,26 +26,66 @@ export default async function TownsPage({ searchParams }: TownsPageProps) {
     id: { id: "asc" as const },
   }[sort || "id"] ?? { id: "asc" as const }) as Record<string, "asc" | "desc">;
 
+  const allTowns = await prisma.town.findMany({
+    select: { iconVersion: true },
+  });
+  const availableVersions = Array.from(
+    new Set(allTowns.map((t) => t.iconVersion).filter((v): v is string => !!v))
+  );
+
+  const selectedVersions = versions ? versions.split(",") : [];
+
+  const where =
+    selectedVersions.length > 0
+      ? { iconVersion: { in: selectedVersions } }
+      : undefined;
+
   const towns = await prisma.town.findMany({
+    where,
     orderBy,
   });
 
+  const createVersionHref = (version: string) => {
+    const newVersions = selectedVersions.includes(version)
+      ? selectedVersions.filter((v) => v !== version)
+      : [...selectedVersions, version];
+    const params = new URLSearchParams();
+    if (sort && sort !== "id") params.set("sort", sort);
+    if (newVersions.length > 0) params.set("versions", newVersions.join(","));
+    const query = params.toString();
+    return `/towns${query ? `?${query}` : ""}`;
+  };
+
+  const createSortHref = (sortKey: string) => {
+    const params = new URLSearchParams();
+    if (sortKey !== "id") params.set("sort", sortKey);
+    if (selectedVersions.length > 0) params.set("versions", selectedVersions.join(","));
+    const query = params.toString();
+    return `/towns${query ? `?${query}` : ""}`;
+  };
+
   const filterItems = [
-    { key: "id", label: "По игре", href: "/towns?sort=id" },
-    { key: "alphabet", label: "По алфавиту", href: "/towns?sort=alphabet" },
-    { key: "alignment", label: "По мировоззрению", href: "/towns?sort=alignment" },
-    { key: "terrain", label: "По родной земле", href: "/towns?sort=terrain" },
-    { key: "continent", label: "По континенту", href: "/towns?sort=continent" },
+    { key: "id", label: "По игре", href: createSortHref("id") },
+    { key: "alphabet", label: "По алфавиту", href: createSortHref("alphabet") },
+    { key: "alignment", label: "По мировоззрению", href: createSortHref("alignment") },
+    { key: "terrain", label: "По родной земле", href: createSortHref("terrain") },
+    { key: "continent", label: "По континенту", href: createSortHref("continent") },
   ];
 
   const activeSort = sort || "id";
+
+  // Функция для получения читаемого имени версии
+  const getVersionLabel = (path: string) => {
+    const fileName = path.split("/").pop()?.toLowerCase() || "";
+    return versionLabels[fileName] || fileName;
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl font-medieval text-gold mb-8">Фракции</h1>
 
-      {/* Фильтры */}
-      <div className="flex flex-wrap gap-2 mb-8">
+      {/* Фильтры сортировки */}
+      <div className="flex flex-wrap gap-2 mb-4">
         {filterItems.map((item) => (
           <Link
             key={item.key}
@@ -53,6 +100,43 @@ export default async function TownsPage({ searchParams }: TownsPageProps) {
           </Link>
         ))}
       </div>
+
+      {/* Фильтрация по версиям */}
+      {availableVersions.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2 mb-8">
+          <span className="text-parchment-dark mr-2">Версии:</span>
+          {availableVersions.map((version) => {
+            const isActive = selectedVersions.includes(version);
+            return (
+              <Link
+                key={version}
+                href={createVersionHref(version)}
+                className={`p-1 rounded border transition-colors ${
+                  isActive
+                    ? "border-gold bg-gold/20"
+                    : "border-gold/30 opacity-60 hover:opacity-100"
+                }`}
+                title={getVersionLabel(version)}
+              >
+                <Image
+                  src={version}
+                  width={32}
+                  height={32}
+                  alt={getVersionLabel(version)}
+                  className="rounded"
+                />
+              </Link>
+            );
+          })}
+
+          {/* Полупрозрачные скобки с выбранными версиями */}
+          {selectedVersions.length > 0 && (
+            <span className="ml-2 px-3 py-1 bg-gold/20 text-parchment-light rounded text-sm">
+              ({selectedVersions.map(getVersionLabel).join(", ")})
+            </span>
+          )}
+        </div>
+      )}
 
       <p className="mt-4 text-parchment-light leading-relaxed">
         Каждая фракция в Heroes of Might and Magic III обладает уникальными
@@ -92,26 +176,25 @@ export default async function TownsPage({ searchParams }: TownsPageProps) {
               )}
             </div>
             <div className="p-4">
-              <h2 className="text-xl font-medieval text-gold group-hover:text-parchment-light transition-colors">
-                {town.name}
-              </h2>
+              <div className="flex items-center gap-1">
+                <h2 className="text-xl font-medieval text-gold group-hover:text-parchment-light transition-colors">
+                  {town.name}
+                </h2>
+                {town.iconVersion && (
+                  <Image
+                    src={town.iconVersion}
+                    width={24}
+                    height={24}
+                    alt={`Версия ${town.name}`}
+                    className="rounded"
+                  />
+                )}
+              </div>
               {town.description && (
                 <p className="mt-2 text-sm text-parchment-dark line-clamp-2">
                   {town.description.replace(/\\n/g, " ")}
                 </p>
               )}
-              {/* <div className="mt-2 text-xs text-parchment-dark">
-                {town.alignment}
-              </div>
-              <div className="mt-2 text-xs text-parchment-dark">
-                {town.nativeTerrain}
-              </div>
-              <div className="mt-2 text-xs text-parchment-dark">
-                {town.country}
-              </div>
-              <div className="mt-2 text-xs text-parchment-dark">
-                {town.continent}
-              </div> */}
             </div>
           </Link>
         ))}
