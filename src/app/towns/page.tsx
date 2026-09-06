@@ -11,23 +11,13 @@ interface TownsPageProps {
 export default async function TownsPage({ searchParams }: TownsPageProps) {
   const { sort } = await searchParams;
 
-  let orderBy: any;
-  switch (sort) {
-    case "alphabet":
-      orderBy = { name: "asc" };
-      break;
-    case "alignment":
-      orderBy = { alignment: "asc" };
-      break;
-    case "terrain":
-      orderBy = { nativeTerrain: "asc" };
-      break;
-    case "continent":
-      orderBy = { continent: "asc" };
-      break;
-    default:
-      orderBy = { id: "asc" };
-  }
+  const orderBy = ({
+    alphabet: { name: "asc" as const },
+    alignment: { alignment: "asc" as const },
+    terrain: { nativeTerrain: "asc" as const },
+    continent: { continent: "asc" as const },
+    id: { id: "asc" as const },
+  }[sort || "id"] ?? { id: "asc" as const }) as Record<string, "asc" | "desc">;
 
   const towns = await prisma.town.findMany({
     orderBy,

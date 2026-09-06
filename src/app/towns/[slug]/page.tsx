@@ -62,7 +62,7 @@ export default async function TownPage({ params }: TownPageProps) {
         href="/towns"
         className="text-parchment-dark hover:text-gold transition-colors"
       >
-        ← Все фракции
+        🢀 Все фракции
       </Link>
       <div className="flex items-center gap-3 mt-4">
         {town.icon && (
