@@ -8,8 +8,8 @@ interface LightboxContextType {
 }
 
 const LightboxContext = createContext<LightboxContextType>({
-  openLightbox: () => {},
-  closeLightbox: () => {},
+  openLightbox: () => { },
+  closeLightbox: () => { },
 });
 
 export const useLightbox = () => useContext(LightboxContext);

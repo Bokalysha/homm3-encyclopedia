@@ -130,8 +130,8 @@ export default function BuildingsCategory({ category, buildings }: BuildingsCate
                         building.sulfurCost === 0 &&
                         building.crystalCost === 0 &&
                         building.gemCost === 0 && (
-                        <span className="text-parchment-dark">—</span>
-                      )}
+                          <span className="text-parchment-dark">—</span>
+                        )}
                     </div>
                   </td>
                   <td className="p-2 border border-gold/60 text-parchment-dark">

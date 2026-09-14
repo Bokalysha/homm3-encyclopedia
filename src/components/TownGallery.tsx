@@ -52,9 +52,8 @@ export default function TownGallery({ images, soundtrack }: TownGalleryProps) {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`w-3 h-3 rounded-full transition-colors ${
-                index === currentIndex ? "bg-gold" : "bg-dark-surface hover:bg-gold/50"
-              }`}
+              className={`w-3 h-3 rounded-full transition-colors ${index === currentIndex ? "bg-gold" : "bg-dark-surface hover:bg-gold/50"
+                }`}
               aria-label={`Показать изображение ${index + 1}`}
             />
           ))}
